@@ -23,6 +23,10 @@ contract Auctions {
     bool end
   );
 
+  constructor () public {
+    createAuction('Example Auction', 'Item details...', 1);
+  }
+
   mapping(uint => Auction) public auctions;
 
   function createAuction (string memory _title, string memory _description, uint256 memory _startPrice) public {
