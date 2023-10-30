@@ -1,0 +1,31 @@
+{
+  "name": "ethereum-bid",
+  "version": "1.0.0",
+  "description": "Application based on ethereum smart contracts allowing to bid products. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtw-programmer/ethereum-auctions.git"
+  },
+  "author": "mtw-programmer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mtw-programmer/ethereum-auctions/issues"
+  },
+  "homepage": "https://github.com/mtw-programmer/ethereum-auctions#readme",
+  "devDependencies": {
+    "bootstrap": "^5.3.2",
+    "chai": "^4.3.10",
+    "chai-as-promised": "^7.1.1",
+    "chai-bignumber": "^3.1.0",
+    "lite-server": "^2.6.1",
+    "truffle": "^5.11.5",
+    "truffle-contract": "^4.0.31"
+  },
+  "dependencies": {
+    "web3": "^4.2.1"
+  }
+}
