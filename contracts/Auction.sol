@@ -29,7 +29,7 @@ contract Auctions {
 
   mapping(uint => Auction) public auctions;
 
-  function createAuction (string memory _title, string memory _description, uint256 memory _startPrice) public {
+  function createAuction (string memory _title, string memory _description, uint256 _startPrice) public {
     auctionCount++;
     auctions[auctionCount] = Auction(auctionCount, msg.sender, _title, _description, _startPrice, _startPrice, false);
     emit AuctionCreated(auctionCount, msg.sender, _title, _description, _startPrice, _startPrice, false);
