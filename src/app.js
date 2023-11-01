@@ -47,6 +47,7 @@ const render = async () => {
   if (app.loading) return;
 
   app.setLoading(true);
+  $('.account').html(`Loggged as: ${app.account}`);
   await renderAuctions();
   app.setLoading(false);
 };
