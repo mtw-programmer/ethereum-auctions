@@ -59,7 +59,7 @@ const createAuction = async () => {
     app.setLoading(true);
     const title = $('#title').val();
     const description = $('#description').val();
-    const price = parseInt($('#price').val()) * 100;
+    const price = Math.round(parseInt($('#price').val()) * 100);
 
     if (title && description && price) {
       await app.auctions.createAuction(title, description, price, { from: app.account });
@@ -119,4 +119,20 @@ const renderAuctions = async () => {
   }
 };
 
+const placeBid = async (id) => {
+  try {
+    const newPrice = Math.round(parseInt($(`.enter-bid[name=${id}]`).val()) * 100);
+    if (!newPrice || !id) return;
+    app.setLoading(true);
+
+    await app.auctions.PlaceBid(id, newPrice, { from: app.account });
+    window.location.reload();
+  } catch (ex) {
+    console.error(ex);
+  } finally {
+    app.setLoading(true);
+  }
+};
+
 $(window).load(() => loadApp());
+$(document).on('click','.bid-btn', (e) => placeBid(e.target.name));
