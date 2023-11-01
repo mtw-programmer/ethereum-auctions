@@ -43,6 +43,8 @@ const loadContract = async () => {
   app.auctions = await app.contracts.auctions.deployed();
 };
 
+$('#add-auction-btn').click(() => createTask());
+
 const render = async () => {
   if (app.loading) return;
 
@@ -50,6 +52,18 @@ const render = async () => {
   $('.account').html(`Loggged as: ${app.account}`);
   await renderAuctions();
   app.setLoading(false);
+};
+
+const createTask = async () => {
+  app.setLoading(true);
+  const title = $('#title').val();
+  const description = $('#description').val();
+  const price = +($('#price').val())*100;
+
+  if (title && description && price)
+    await app.auctions.createAuction(title, description, price, { from: app.account });
+
+  window.location.reload();
 };
 
 const renderAuctions = async () => {
@@ -69,7 +83,7 @@ const renderAuctions = async () => {
 
     newAuctionTemplate.find('.title').html(title);
     newAuctionTemplate.find('.description').html(description);
-    newAuctionTemplate.find('.currentPrice').html(currentPrice);
+    newAuctionTemplate.find('.currentPrice').html((currentPrice / 100).toFixed(2));
 
     if (owner.toLowerCase() == app.account.toLowerCase()) {
       newAuctionTemplate.find('.enter-bid')
