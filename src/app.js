@@ -43,7 +43,7 @@ const loadContract = async () => {
   app.auctions = await app.contracts.auctions.deployed();
 };
 
-$('#add-auction-btn').click(() => createTask());
+$('#add-auction-btn').click(() => createAuction());
 
 const render = async () => {
   if (app.loading) return;
@@ -54,17 +54,25 @@ const render = async () => {
   app.setLoading(false);
 };
 
-const createTask = async () => {
-  app.setLoading(true);
-  const title = $('#title').val();
-  const description = $('#description').val();
-  const price = +($('#price').val())*100;
+const createAuction = async () => {
+  try {
+    app.setLoading(true);
+    const title = $('#title').val();
+    const description = $('#description').val();
+    const price = parseInt($('#price').val()) * 100;
 
-  if (title && description && price)
-    await app.auctions.createAuction(title, description, price, { from: app.account });
+    if (title && description && price) {
+      await app.auctions.createAuction(title, description, price, { from: app.account });
+    }
 
-  window.location.reload();
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    app.setLoading(false);
+  }
 };
+
 
 const renderAuctions = async () => {
   const auctionCount = await app.auctions.auctionCount();
@@ -100,7 +108,7 @@ const renderAuctions = async () => {
         .prop('name', id)
         .removeProp('disabled');
 
-      newAuctionTemplate.find('.stop-bid-btn')
+      newAuctionTemplate.find('.bid-btn')
         .prop('name', id)
         .removeProp('disabled');
     }
