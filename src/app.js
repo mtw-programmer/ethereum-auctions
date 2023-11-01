@@ -106,6 +106,7 @@ const renderAuctions = async () => {
     else {
       newAuctionTemplate.find('.enter-bid')
         .prop('name', id)
+        .prop('min', (currentPrice / 100 + 0.01).toFixed(2))
         .removeProp('disabled');
 
       newAuctionTemplate.find('.bid-btn')
