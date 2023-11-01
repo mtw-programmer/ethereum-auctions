@@ -4,7 +4,6 @@ contract Auctions {
   uint public auctionCount = 0;
 
   struct Bid {
-    uint auctionId;
     address bidder;
     uint256 amount;
   }
@@ -51,9 +50,9 @@ contract Auctions {
   function PlaceBid (uint _id, uint256 _amount) public {
     require(msg.sender != auctions[auctionCount].owner, "You cannot bid your own auctions!");
     uint256 oldPrice = auctions[auctionCount].currentPrice;
-    require(_amount - oldPrice > 1, "Bid amounts should be greater by at least 1 unit!");
+    require(_amount - oldPrice >= 1, "Bid amounts should be greater by at least 1 unit!");
 
-    Bid memory newBid = Bid(_id, msg.sender, _amount);
+    Bid memory newBid = Bid(msg.sender, _amount);
     bids[_id].push(newBid);
     auctions[auctionCount].currentPrice = _amount;
     emit PlacedBid(_id, msg.sender, oldPrice, _amount);
