@@ -43,7 +43,16 @@
                     <th scope="col">Stop</th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              <tr class="auctionTemplate" style="display: none;">
+                <td class="title"></td>
+                <td class="description"></td>
+                <td class="currentPrice"></td>
+                <td><input type="number" class="form-control enter-bid" id="price" disabled></td>
+                <td><button class="btn btn-success bid-btn" disabled>Bid</button></td>
+                <td><button class="btn btn-danger stop-bid-btn" disabled>Stop</button></td>
+              </tr>
+            </tbody>
         </table>
         <div id="loader" class="text-center">
           <p class="text-center">Loading...</p>
