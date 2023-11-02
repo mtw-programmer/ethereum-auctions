@@ -23,7 +23,20 @@ contract('Auctions', (accounts) => {
     assert.equal(event.title, 'Test title');
     assert.equal(event.description, 'Description');
     assert.equal(event.startPrice.toNumber(), 1);
-    assert.equal(event.currentPrice.toNumber(), 1);
-    assert.equal(event.end, false);
+  });
+
+  it('successfully places a bid', async () => {
+    const auctionCount = await this.auctions.auctionCount();
+
+    const bidResult = await this.auctions.PlaceBid(auctionCount, 2, { from: accounts[1] });
+    const { currentPrice } = bidResult.logs[0].args;
+
+    const event = bidResult.logs[0].args;
+
+    assert.equal(event.id.toNumber(), auctionCount);
+    assert.equal(event.bidder.toLowerCase(), accounts[1].toLowerCase());
+    assert.equal(event.oldPrice.toNumber(), 1);
+    assert.equal(currentPrice.toNumber(), 2);
+    assert.equal(event.currentPrice.toNumber(), 2);
   });
 });
