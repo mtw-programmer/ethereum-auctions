@@ -37,4 +37,13 @@ contract('Auctions', (accounts) => {
     assert.equal(currentPrice.toNumber(), 2);
     assert.equal(event.currentPrice.toNumber(), 2);
   });
+
+  it('successfully stops an auction', async () => {
+    const result = await this.auctions.stopAuction(1, { from: accounts[0] });
+    const event = result.logs[0].args;
+    const auction = await this.auctions.auctions(1);
+
+    assert.equal(event.id.toNumber(), 1);
+    assert.equal(auction.end, true);
+  })
 });
