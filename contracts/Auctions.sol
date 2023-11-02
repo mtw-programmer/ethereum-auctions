@@ -33,6 +33,10 @@ contract Auctions {
     uint256 currentPrice
   );
 
+  event AuctionStopped (
+    uint id
+  );
+
   constructor () public {
     createAuction('Example Auction', 'Item details...', 1);
   }
@@ -55,5 +59,12 @@ contract Auctions {
     bids[_id].push(newBid);
     auctions[_id].currentPrice = _amount;
     emit PlacedBid(_id, msg.sender, oldPrice, _amount);
+  }
+
+  function stopAuction (uint _id) public {
+    require(msg.sender == auctions[_id].owner, "You can stop only your auctions!");
+    require(!auctions[_id].end, "This auction is already stopped!");
+    auctions[_id].end = true;
+    emit AuctionStopped(_id);
   }
 }
