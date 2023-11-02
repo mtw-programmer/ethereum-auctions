@@ -93,9 +93,6 @@ const renderAuctions = async () => {
     newAuctionTemplate.find('.description').html(description);
     newAuctionTemplate.find('.currentPrice').html((currentPrice / 100).toFixed(2));
 
-    console.log(owner.toLowerCase());
-    console.log(app.account.toLowerCase());
-
     if (owner.toLowerCase() == app.account.toLowerCase()) {
       newAuctionTemplate.find('.enter-bid')
         .prop('name', id);
