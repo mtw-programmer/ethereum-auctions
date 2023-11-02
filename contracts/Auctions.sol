@@ -42,7 +42,6 @@ contract Auctions {
 
   function createAuction (string memory _title, string memory _description, uint256 _startPrice) public {
     auctionCount++;
-    Bid[] memory newBids = new Bid[](0);
     auctions[auctionCount] = Auction(auctionCount, msg.sender, _title, _description, _startPrice, _startPrice, false);
     emit AuctionCreated(auctionCount, msg.sender, _title, _description, _startPrice);
   }

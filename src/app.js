@@ -93,6 +93,9 @@ const renderAuctions = async () => {
     newAuctionTemplate.find('.description').html(description);
     newAuctionTemplate.find('.currentPrice').html((currentPrice / 100).toFixed(2));
 
+    console.log(owner.toLowerCase());
+    console.log(app.account.toLowerCase());
+
     if (owner.toLowerCase() == app.account.toLowerCase()) {
       newAuctionTemplate.find('.enter-bid')
         .prop('name', id);
@@ -126,6 +129,7 @@ const placeBid = async (id) => {
     app.setLoading(true);
 
     await app.auctions.PlaceBid(id, newPrice, { from: app.account });
+    await delay(500);
     window.location.reload();
   } catch (ex) {
     console.error(ex);
