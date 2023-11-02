@@ -134,7 +134,7 @@ const placeBid = async (id) => {
   } catch (ex) {
     console.error(ex);
   } finally {
-    app.setLoading(true);
+    app.setLoading(false);
   }
 };
 
