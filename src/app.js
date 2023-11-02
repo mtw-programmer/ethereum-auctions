@@ -101,6 +101,7 @@ const renderAuctions = async () => {
         .prop('name', id);
 
       newAuctionTemplate.find('.stop-bid-btn')
+        .prop('name', id)
         .removeProp('disabled');
     }
     else {
@@ -135,5 +136,19 @@ const placeBid = async (id) => {
   }
 };
 
+const stopAuction = async (id) => {
+  try {
+    console.log(id);
+    app.setLoading(true);
+    await app.auctions.stopAuction(id, { from: app.account });
+    await delay(500);
+  } catch (ex) {
+    console.log(ex);
+  } finally {
+    app.setLoading(false);
+  }
+};
+
 $(window).load(() => loadApp());
 $(document).on('click','.bid-btn', (e) => placeBid(e.target.name));
+$(document).on('click','.stop-bid-btn', (e) => stopAuction(e.target.name));
