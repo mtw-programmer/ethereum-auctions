@@ -132,7 +132,7 @@ const renderAuctions = async () => {
 
         if (lastBid.toNumber() - 1 < 0) {
           newStopTemplate.find('.auctionWinner').html('-');
-          newStopTemplate.find('.startPrice').html('-');
+          newStopTemplate.find('.startPrice').html(startPrice);
           newStopTemplate.find('.endPrice').html('-');
         } else {
           const bid = await app.auctions.bids(i, lastBid.toNumber() - 1);
