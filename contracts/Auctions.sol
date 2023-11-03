@@ -53,6 +53,7 @@ contract Auctions {
   }
 
   function PlaceBid (uint _id, uint256 _amount) public {
+    require(_id > 0 && _id <= auctionCount, "Invalid auction ID");
     require(msg.sender != auctions[_id].owner, "You cannot bid your own auctions!");
     uint256 oldPrice = auctions[_id].currentPrice;
     require(_amount - oldPrice >= 1, "Bid amounts should be greater by at least 1 unit!");
@@ -70,6 +71,7 @@ contract Auctions {
   }
 
   function stopAuction (uint _id) public {
+    require(_id > 0 && _id <= auctionCount, "Invalid auction ID");
     require(msg.sender == auctions[_id].owner, "You can stop only your auctions!");
     require(!auctions[_id].end, "This auction is already stopped!");
     auctions[_id].end = true;
