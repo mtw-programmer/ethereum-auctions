@@ -1,3 +1,5 @@
+const { assert } = require("chai");
+
 const Auctions = artifacts.require('./Auctions.sol');
 
 contract('Auctions', (accounts) => {
@@ -26,7 +28,7 @@ contract('Auctions', (accounts) => {
   });
 
   it('successfully places a bid', async () => {
-    const bidResult = await this.auctions.PlaceBid(1, 2, { from: accounts[1] });
+    const bidResult = await this.auctions.placeBid(1, 2, { from: accounts[1] });
     const { currentPrice } = bidResult.logs[0].args;
 
     const event = bidResult.logs[0].args;
@@ -36,5 +38,20 @@ contract('Auctions', (accounts) => {
     assert.equal(event.oldPrice.toNumber(), 1);
     assert.equal(currentPrice.toNumber(), 2);
     assert.equal(event.currentPrice.toNumber(), 2);
+  });
+
+  it('successfully stops an auction', async () => {
+    const result = await this.auctions.stopAuction(1, { from: accounts[0] });
+    const event = result.logs[0].args;
+    const auction = await this.auctions.auctions(1);
+
+    assert.equal(event.id.toNumber(), 1);
+    assert.equal(auction.end, true);
+  });
+
+  it('successfully returns last bid index', async () => {
+    await this.auctions.placeBid(2, 5, { from: accounts[1] });
+    const bid = await this.auctions.getLastBidIndex(1);
+    assert.equal(bid.toNumber(), 1);
   });
 });

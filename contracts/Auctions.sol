@@ -33,27 +33,48 @@ contract Auctions {
     uint256 currentPrice
   );
 
+  event AuctionStopped (
+    uint id
+  );
+
   constructor () public {
     createAuction('Example Auction', 'Item details...', 1);
   }
 
   mapping(uint => Auction) public auctions;
   mapping(uint => Bid[]) public bids;
+  mapping(uint => uint) public bidLastIndex;
 
   function createAuction (string memory _title, string memory _description, uint256 _startPrice) public {
     auctionCount++;
     auctions[auctionCount] = Auction(auctionCount, msg.sender, _title, _description, _startPrice, _startPrice, false);
+    bidLastIndex[auctionCount] = 0;
     emit AuctionCreated(auctionCount, msg.sender, _title, _description, _startPrice);
   }
 
-  function PlaceBid (uint _id, uint256 _amount) public {
+  function placeBid (uint _id, uint256 _amount) public {
+    require(_id > 0 && _id <= auctionCount, "Invalid auction ID");
     require(msg.sender != auctions[_id].owner, "You cannot bid your own auctions!");
     uint256 oldPrice = auctions[_id].currentPrice;
     require(_amount - oldPrice >= 1, "Bid amounts should be greater by at least 1 unit!");
 
     Bid memory newBid = Bid(msg.sender, _amount);
     bids[_id].push(newBid);
+    bidLastIndex[_id] += 1;
     auctions[_id].currentPrice = _amount;
     emit PlacedBid(_id, msg.sender, oldPrice, _amount);
+  }
+
+  function getLastBidIndex (uint _id) public view returns (uint) {
+    require(_id > 0 && _id <= auctionCount, "Invalid auction ID");
+    return bidLastIndex[_id];
+  }
+
+  function stopAuction (uint _id) public {
+    require(_id > 0 && _id <= auctionCount, "Invalid auction ID");
+    require(msg.sender == auctions[_id].owner, "You can stop only your auctions!");
+    require(!auctions[_id].end, "This auction is already stopped!");
+    auctions[_id].end = true;
+    emit AuctionStopped(_id);
   }
 }
