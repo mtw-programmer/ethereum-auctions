@@ -43,10 +43,12 @@ contract Auctions {
 
   mapping(uint => Auction) public auctions;
   mapping(uint => Bid[]) public bids;
+  mapping(uint => uint) public bidLastIndex;
 
   function createAuction (string memory _title, string memory _description, uint256 _startPrice) public {
     auctionCount++;
     auctions[auctionCount] = Auction(auctionCount, msg.sender, _title, _description, _startPrice, _startPrice, false);
+    bidLastIndex[auctionCount] = 0;
     emit AuctionCreated(auctionCount, msg.sender, _title, _description, _startPrice);
   }
 
@@ -57,8 +59,14 @@ contract Auctions {
 
     Bid memory newBid = Bid(msg.sender, _amount);
     bids[_id].push(newBid);
+    bidLastIndex[_id] += 1;
     auctions[_id].currentPrice = _amount;
     emit PlacedBid(_id, msg.sender, oldPrice, _amount);
+  }
+
+  function getLastBidIndex (uint _id) public view returns (uint) {
+    require(_id > 0 && _id <= auctionCount, "Invalid auction ID");
+    return bidLastIndex[_id];
   }
 
   function stopAuction (uint _id) public {
