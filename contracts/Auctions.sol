@@ -52,7 +52,7 @@ contract Auctions {
     emit AuctionCreated(auctionCount, msg.sender, _title, _description, _startPrice);
   }
 
-  function PlaceBid (uint _id, uint256 _amount) public {
+  function placeBid (uint _id, uint256 _amount) public {
     require(_id > 0 && _id <= auctionCount, "Invalid auction ID");
     require(msg.sender != auctions[_id].owner, "You cannot bid your own auctions!");
     uint256 oldPrice = auctions[_id].currentPrice;

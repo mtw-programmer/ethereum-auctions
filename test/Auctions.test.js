@@ -28,7 +28,7 @@ contract('Auctions', (accounts) => {
   });
 
   it('successfully places a bid', async () => {
-    const bidResult = await this.auctions.PlaceBid(1, 2, { from: accounts[1] });
+    const bidResult = await this.auctions.placeBid(1, 2, { from: accounts[1] });
     const { currentPrice } = bidResult.logs[0].args;
 
     const event = bidResult.logs[0].args;
@@ -50,7 +50,7 @@ contract('Auctions', (accounts) => {
   });
 
   it('successfully returns last bid index', async () => {
-    await this.auctions.PlaceBid(2, 5, { from: accounts[1] });
+    await this.auctions.placeBid(2, 5, { from: accounts[1] });
     const bid = await this.auctions.getLastBidIndex(1);
     assert.equal(bid.toNumber(), 1);
   });

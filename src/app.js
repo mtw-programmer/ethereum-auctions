@@ -154,7 +154,7 @@ const placeBid = async (id) => {
     if (!newPrice || !id) return;
     app.setLoading(true);
 
-    await app.auctions.PlaceBid(id, newPrice, { from: app.account });
+    await app.auctions.placeBid(id, newPrice, { from: app.account });
   } catch (ex) {
     console.error(ex);
   } finally {
