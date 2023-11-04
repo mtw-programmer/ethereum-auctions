@@ -1,3 +1,22 @@
 # ethereum-auctions
 
-Application based on ethereum smart contracts allowing to bid products.
+Application based on ethereum smart contracts allowing to create auctions, stop auction and place bids.
+
+# set-up
+
+```
+$ npm install
+$ truffle migrate
+```
+
+# run
+
+```
+$ npx lite-server
+```
+
+# run tests
+
+```
+$ truffle test
+```
