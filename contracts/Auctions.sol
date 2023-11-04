@@ -57,6 +57,7 @@ contract Auctions {
     require(msg.sender != auctions[_id].owner, "You cannot bid your own auctions!");
     uint256 oldPrice = auctions[_id].currentPrice;
     require(_amount - oldPrice >= 1, "Bid amounts should be greater by at least 1 unit!");
+    require(!auctions[_id].end, "Auction is expired!");
 
     Bid memory newBid = Bid(msg.sender, _amount);
     bids[_id].push(newBid);
