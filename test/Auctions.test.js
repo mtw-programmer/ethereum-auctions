@@ -86,6 +86,43 @@ contract('Auctions', (accounts) => {
     assert.equal(auction.end, true);
   });
 
+  it('stopping an auction should fail when too low id given', async () => {
+    try {
+      await this.auctions.stopAuction(0, { from: accounts[0] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'Invalid auction ID');
+    }
+  });
+
+  it('stopping an auction should fail when too high id given', async () => {
+    try {
+      const auctionCount = await this.auctions.auctionCount();
+      await this.auctions.stopAuction(auctionCount + 1, { from: accounts[0] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'Invalid auction ID');
+    }
+  });
+
+  it('stopping an auction should fail when the sender is not the owner of an auction', async () => {
+    try {
+      await this.auctions.stopAuction(1, { from: accounts[1] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'You can stop only your auctions!');
+    }
+  });
+
+  it('stopping an auction should fail when the auction is already stopped', async () => {
+    try {
+      await this.auctions.stopAuction(1, { from: accounts[0] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'This auction is already stopped!');
+    }
+  });
+
   it('successfully returns last bid index', async () => {
     await this.auctions.placeBid(2, 5, { from: accounts[1] });
     const bid = await this.auctions.getLastBidIndex(1);
