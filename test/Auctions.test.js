@@ -128,4 +128,25 @@ contract('Auctions', (accounts) => {
     const bid = await this.auctions.getLastBidIndex(1);
     assert.equal(bid.toNumber(), 1);
   });
+
+
+  it('getLastBidIndex should fail when too low id given', async () => {
+    try {
+      await this.auctions.getLastBidIndex(0, { from: accounts[0] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'Invalid auction ID');
+    }
+  });
+
+
+  it('getLastBidIndex should fail when too high id given', async () => {
+    try {
+      const auctionCount = await this.auctions.auctionCount();
+      await this.auctions.getLastBidIndex(auctionCount + 1, { from: accounts[0] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'Invalid auction ID');
+    }
+  });
 });
