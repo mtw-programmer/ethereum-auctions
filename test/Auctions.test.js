@@ -40,6 +40,43 @@ contract('Auctions', (accounts) => {
     assert.equal(event.currentPrice.toNumber(), 2);
   });
 
+  it('placing a bid should fail when too low id given', async () => {
+    try {
+      await this.auctions.placeBid(0, 3, { from: accounts[1] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'Invalid auction ID');
+    }
+  });
+  
+  it('placing a bid should fail when too high id given', async () => {
+    try {
+      const auctionCount = await this.auctions.auctionCount();
+      await this.auctions.placeBid(auctionCount + 1, 2, { from: accounts[1] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'Invalid auction ID');
+    }
+  });
+  
+  it('fails when owner of the auction places a bid', async () => {
+    try {
+      await this.auctions.placeBid(1, 3, { from: accounts[0] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'You cannot bid your own auctions!');
+    }
+  });
+  
+  it('fails when placing a bid amount is not higher by 1 unit', async () => {
+    try {
+      await this.auctions.placeBid(1, 2, { from: accounts[1] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'Bid amounts should be greater by at least 1 unit!');
+    }
+  });
+
   it('successfully stops an auction', async () => {
     const result = await this.auctions.stopAuction(1, { from: accounts[0] });
     const event = result.logs[0].args;
