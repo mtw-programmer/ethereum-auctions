@@ -86,6 +86,15 @@ contract('Auctions', (accounts) => {
     assert.equal(auction.end, true);
   });
 
+  it('placing a bid fails when auction is expired', async () => {
+    try {
+      await this.auctions.placeBid(1, 3, { from: accounts[1] });
+      assert.fail('Expected an error but did not get one!');
+    } catch (ex) {
+      assert.include(ex.message, 'Auction is expired!');
+    }
+  });
+
   it('stopping an auction should fail when too low id given', async () => {
     try {
       await this.auctions.stopAuction(0, { from: accounts[0] });
