@@ -6,7 +6,7 @@ const loadAccount = async () => {
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     app.account = accounts[0];
   } catch (ex) {
-    console.log(ex);
+    console.error(ex);
   }
 };
 
