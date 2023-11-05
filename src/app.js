@@ -6,18 +6,20 @@ class App {
     this.stopTemplate = '';
   }
 
-  setLoading(bool) {
-    this.loading = bool;
-    const loader = $('#loader');
-    const content = $('.active-auctions');
+  setLoading(active, end) {
+    this.loading = active || end;
+    let step = 0;
+    let bool = active;
+    let loader = $('#active-loader');
+    let content = $('.active-auctions');
 
-    if (bool) {
-      loader.show();
-      content.hide();
-    } else {
-      loader.hide();
-      content.show();
-    }
+    toggleLoaders(bool, loader, content);
+
+    bool = end;
+    loader = $('#end-loader');
+    content = $('#stop-auctions');
+
+    toggleLoaders(bool, loader, content);
   }
 }
 
@@ -40,6 +42,16 @@ const loadAccount = async () => {
   }
 };
 
+const toggleLoaders = (bool, loader, content) => {
+  if (bool) {
+    loader.show();
+    content.hide();
+  } else {
+    loader.hide();
+    content.show();
+  }
+};
+
 const loadContract = async () => {
   const Auctions = await $.getJSON('Auctions.json');
   app.contracts.auctions = TruffleContract(Auctions);
@@ -52,10 +64,10 @@ $('#add-auction-btn').click(() => createAuction());
 const render = async () => {
   if (app.loading) return;
 
-  app.setLoading(true);
+  app.setLoading(true, true);
   $('.account').html(`Loggged as: ${app.account}`);
   await renderAuctions();
-  app.setLoading(false);
+  app.setLoading(false, false);
 };
 
 const loadTemplates = () => {
@@ -65,7 +77,7 @@ const loadTemplates = () => {
 
 const createAuction = async () => {
   try {
-    app.setLoading(true);
+    app.setLoading(true, false);
     const title = $('#title').val();
     const description = $('#description').val();
     const price = Math.round(parseFloat($('#price').val()) * 100);
@@ -78,7 +90,7 @@ const createAuction = async () => {
   } catch (error) {
     console.error(error);
   } finally {
-    app.setLoading(false);
+    app.setLoading(false, false);
   }
 };
 
@@ -159,13 +171,13 @@ const placeBid = async (id) => {
   try {
     const newPrice = Math.round(parseFloat($(`.enter-bid[name=${id}]`).val()) * 100);
     if (!newPrice || !id) return;
-    app.setLoading(true);
+    app.setLoading(true, false);
 
     await app.auctions.placeBid(id, newPrice, { from: app.account });
   } catch (ex) {
     console.error(ex);
   } finally {
-    app.setLoading(false);
+    app.setLoading(false, false);
     window.location.reload();
   }
 };
@@ -173,12 +185,12 @@ const placeBid = async (id) => {
 const stopAuction = async (id) => {
   try {
     console.log(id);
-    app.setLoading(true);
+    app.setLoading(true, true);
     await app.auctions.stopAuction(id, { from: app.account });
   } catch (ex) {
     console.log(ex);
   } finally {
-    app.setLoading(false);
+    app.setLoading(false, false);
     window.location.reload();
   }
 };
@@ -188,7 +200,6 @@ const onAuctionCreated = () => {
     if (!error) {
       const id = event.args.id.toNumber();
       if (event.args.owner.toLowerCase() !== app.account.toLowerCase() && !app.loading) {
-        const activeTemplate = $('.activeTemplate');
         const title = event.args.title;
         const description = event.args.description;
         const currentPrice = event.args.startPrice.toNumber();
