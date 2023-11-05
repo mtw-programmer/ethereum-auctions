@@ -1,4 +1,4 @@
-import { onAuctionCreated } from './events.mjs';
+import { toggleLoaders, loadApp } from './load.mjs';
 
 class App {
   constructor() {
@@ -26,40 +26,6 @@ class App {
 
 const app = new App();
 
-const loadApp = async () => {
-  await loadAccount();
-  await loadContract();
-  loadTemplates();
-  await render();
-  onAuctionCreated();
-};
-
-const loadAccount = async () => {
-  try {
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    app.account = accounts[0];
-  } catch (ex) {
-    console.log(ex);
-  }
-};
-
-const toggleLoaders = (bool, loader, content) => {
-  if (bool) {
-    loader.show();
-    content.hide();
-  } else {
-    loader.hide();
-    content.show();
-  }
-};
-
-const loadContract = async () => {
-  const Auctions = await $.getJSON('Auctions.json');
-  app.contracts.auctions = TruffleContract(Auctions);
-  app.contracts.auctions.setProvider(ethereum);
-  app.auctions = await app.contracts.auctions.deployed();
-};
-
 $('#add-auction-btn').click(() => createAuction());
 
 const render = async () => {
@@ -69,11 +35,6 @@ const render = async () => {
   $('.account').html(`Loggged as: ${app.account}`);
   await renderAuctions();
   app.setLoading(false, false);
-};
-
-const loadTemplates = () => {
-  app.activeTemplate = $('.activeTemplate');
-  app.stopTemplate = $('.stopTemplate');
 };
 
 const createAuction = async () => {
@@ -94,7 +55,6 @@ const createAuction = async () => {
     app.setLoading(false, false);
   }
 };
-
 
 const renderAuctions = async () => {
     const auctionCount = await app.auctions.auctionCount();
@@ -202,4 +162,4 @@ $(window).load(() => loadApp());
 $(document).on('click','.bid-btn', (e) => placeBid(e.target.name));
 $(document).on('click','.stop-bid-btn', (e) => stopAuction(e.target.name));
 
-export { app };
+export { app, render };
