@@ -1,4 +1,4 @@
-import { toggleLoaders, loadApp } from './load.mjs';
+import { toggleLoaders } from './load.mjs';
 import { render } from './render.mjs';
 import './listeners.mjs';
 
