@@ -8,7 +8,6 @@ class App {
 
   setLoading(active, end) {
     this.loading = active || end;
-    let step = 0;
     let bool = active;
     let loader = $('#active-loader');
     let content = $('.active-auctions');
