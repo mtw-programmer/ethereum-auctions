@@ -2,6 +2,8 @@ class App {
   constructor() {
     this.loading = false;
     this.contracts = {};
+    this.activeTemplate = '';
+    this.stopTemplate = '';
   }
 
   setLoading(bool) {
@@ -24,7 +26,9 @@ const app = new App();
 const loadApp = async () => {
   await loadAccount();
   await loadContract();
+  loadTemplates();
   await render();
+  onAuctionCreated();
 };
 
 const loadAccount = async () => {
@@ -54,6 +58,11 @@ const render = async () => {
   app.setLoading(false);
 };
 
+const loadTemplates = () => {
+  app.activeTemplate = $('.activeTemplate');
+  app.stopTemplate = $('.stopTemplate');
+};
+
 const createAuction = async () => {
   try {
     app.setLoading(true);
@@ -76,8 +85,6 @@ const createAuction = async () => {
 
 const renderAuctions = async () => {
     const auctionCount = await app.auctions.auctionCount();
-    const activeTemplate = $('.activeTemplate');
-    const stopTemplate = $('.stopTemplate');
 
     for (let i = 1; i <= auctionCount; i++) {
       const auction = await app.auctions.auctions(i);
@@ -90,7 +97,7 @@ const renderAuctions = async () => {
       const end = auction[6];
 
       if (!end) {
-        const newActiveTemplate = activeTemplate.clone();
+        const newActiveTemplate = app.activeTemplate.clone();
 
         newActiveTemplate.find('.title').html(title);
         newActiveTemplate.find('.description').html(description);
@@ -123,7 +130,7 @@ const renderAuctions = async () => {
         $('.active-auctions').append(newActiveTemplate);
         newActiveTemplate.show();
       } else {
-        const newStopTemplate = stopTemplate.clone();
+        const newStopTemplate = app.stopTemplate.clone();
 
         newStopTemplate.find('.title').html(title);
         newStopTemplate.find('.description').html(description);
@@ -174,6 +181,41 @@ const stopAuction = async (id) => {
     app.setLoading(false);
     window.location.reload();
   }
+};
+
+const onAuctionCreated = () => {
+  app.auctions.AuctionCreated({}, (error, event) => {
+    if (!error) {
+      const id = event.args.id.toNumber();
+      if (event.args.owner.toLowerCase() !== app.account.toLowerCase() && !app.loading) {
+        const activeTemplate = $('.activeTemplate');
+        const title = event.args.title;
+        const description = event.args.description;
+        const currentPrice = event.args.startPrice.toNumber();
+
+        const newActiveTemplate = app.activeTemplate.clone();
+
+        newActiveTemplate.find('.title').html(title);
+        newActiveTemplate.find('.description').html(description);
+
+        newActiveTemplate.find('.currentPrice').html((currentPrice / 100).toFixed(2));
+
+        newActiveTemplate.find('.enter-bid')
+            .prop('name', id)
+            .prop('min', (currentPrice / 100 + 0.01).toFixed(2))
+            .removeProp('disabled');
+
+        newActiveTemplate.find('.bid-btn')
+          .prop('name', id)
+          .removeProp('disabled');
+
+        $('.active-auctions').append(newActiveTemplate);
+        newActiveTemplate.show();
+      }
+    } else {
+      console.error(error);
+    }
+  });
 };
 
 $(window).load(() => loadApp());
