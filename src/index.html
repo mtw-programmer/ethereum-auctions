@@ -53,7 +53,7 @@
               </tr>
             </tbody>
         </table>
-        <div id="loader" class="text-center">
+        <div id="active-loader" class="text-center">
           <p class="text-center">Loading...</p>
         </div>
     </div>
@@ -80,13 +80,16 @@
               </tr>
             </tbody>
         </table>
+        <div id="end-loader" class="text-center">
+          <p class="text-center">Loading...</p>
+        </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="vendor/truffle-contract/dist/truffle-contract.js"></script>
     <script src="vendor/web3/dist/web3.min.js"></script>
-    <script src="./app.js"></script>
+    <script type="module" src="js/app.mjs"></script>
 </body>
 
 </html>

@@ -34,7 +34,8 @@ contract Auctions {
   );
 
   event AuctionStopped (
-    uint id
+    uint id,
+    address owner
   );
 
   constructor () public {
@@ -76,6 +77,6 @@ contract Auctions {
     require(msg.sender == auctions[_id].owner, "You can stop only your auctions!");
     require(!auctions[_id].end, "This auction is already stopped!");
     auctions[_id].end = true;
-    emit AuctionStopped(_id);
+    emit AuctionStopped(_id, auctions[_id].owner);
   }
 }
