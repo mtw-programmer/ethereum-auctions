@@ -12,8 +12,8 @@ const createAuction = async () => {
     }
 
     window.location.reload();
-  } catch (error) {
-    console.error(error);
+  } catch (ex) {
+    console.error(ex);
   } finally {
     app.setLoading(false, false);
   }
