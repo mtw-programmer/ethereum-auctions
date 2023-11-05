@@ -11,18 +11,22 @@ class App {
   }
 
   setLoading(active, end) {
-    this.loading = active || end;
-    let bool = active;
-    let loader = $('#active-loader');
-    let content = $('.active-auctions');
+    try {
+      this.loading = active || end;
+      let bool = active;
+      let loader = $('#active-loader');
+      let content = $('.active-auctions');
 
-    toggleLoaders(bool, loader, content);
+      toggleLoaders(bool, loader, content);
 
-    bool = end;
-    loader = $('#end-loader');
-    content = $('#stop-auctions');
+      bool = end;
+      loader = $('#end-loader');
+      content = $('#stop-auctions');
 
-    toggleLoaders(bool, loader, content);
+      toggleLoaders(bool, loader, content);
+    } catch (ex) {
+      console.error(ex);
+    }
   }
 }
 

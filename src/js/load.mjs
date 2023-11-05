@@ -11,20 +11,28 @@ const loadAccount = async () => {
 };
 
 const toggleLoaders = (bool, loader, content) => {
-  if (bool) {
-    loader.show();
-    content.hide();
-  } else {
-    loader.hide();
-    content.show();
+  try {
+    if (bool) {
+      loader.show();
+      content.hide();
+    } else {
+      loader.hide();
+      content.show();
+    }
+  } catch (ex) {
+    console.error(ex);
   }
 };
 
 const loadContract = async () => {
-  const Auctions = await $.getJSON('Auctions.json');
-  app.contracts.auctions = TruffleContract(Auctions);
-  app.contracts.auctions.setProvider(ethereum);
-  app.auctions = await app.contracts.auctions.deployed();
+  try {
+    const Auctions = await $.getJSON('Auctions.json');
+    app.contracts.auctions = TruffleContract(Auctions);
+    app.contracts.auctions.setProvider(ethereum);
+    app.auctions = await app.contracts.auctions.deployed();
+  } catch (ex) {
+    console.error(ex);
+  }
 };
 
 const loadTemplates = () => {
@@ -33,11 +41,15 @@ const loadTemplates = () => {
 };
 
 const loadApp = async () => {
-  await loadAccount();
-  await loadContract();
-  loadTemplates();
-  await render();
-  onAuctionCreated();
+  try {
+    await loadAccount();
+    await loadContract();
+    loadTemplates();
+    await render();
+    onAuctionCreated();
+  } catch (ex) {
+    console.error(ex);
+  }
 };
 
 export { toggleLoaders, loadApp };
