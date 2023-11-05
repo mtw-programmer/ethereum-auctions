@@ -40,7 +40,7 @@ const stopAuction = async (id) => {
     app.setLoading(true, true);
     await app.auctions.stopAuction(id, { from: app.account });
   } catch (ex) {
-    console.log(ex);
+    console.error(ex);
   } finally {
     app.setLoading(false, false);
     window.location.reload();
