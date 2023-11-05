@@ -1,6 +1,6 @@
 # Ethereum Auctions
 
-Application based on solidity smart contracts allowing to create auctions, stop auction and place bids.
+Application based on solidity smart contracts allowing to create, stop auctions and place bids.
 
 ## set-up
 
