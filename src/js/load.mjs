@@ -40,11 +40,4 @@ const loadApp = async () => {
   onAuctionCreated();
 };
 
-export {
-  loadAccount,
-  toggleLoaders,
-  loadContract,
-  loadTemplates,
-  loadApp
-};
-
+export { toggleLoaders, loadApp };
