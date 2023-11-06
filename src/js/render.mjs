@@ -34,6 +34,7 @@ const renderActiveAuctions = async (properties) => {
   try {
     const newActiveTemplate = app.activeTemplate.clone();
 
+      newActiveTemplate.attr('name', properties.id);
       newActiveTemplate.find('.title').html(properties.title);
       newActiveTemplate.find('.description').html(properties.description);
 
@@ -53,7 +54,7 @@ const renderActiveAuctions = async (properties) => {
       else {
         newActiveTemplate.find('.enter-bid')
           .prop('name', properties.id)
-          .prop('min', properties.endPrice)
+          .prop('min', (+properties.endPrice + 0.01).toFixed(2))
           .removeProp('disabled');
 
         newActiveTemplate.find('.bid-btn')
