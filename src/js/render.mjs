@@ -53,7 +53,7 @@ const renderActiveAuctions = async (properties) => {
       else {
         newActiveTemplate.find('.enter-bid')
           .prop('name', properties.id)
-          .prop('min', properties.endPrice)
+          .prop('min', (+properties.endPrice + 0.01).toFixed(2))
           .removeProp('disabled');
 
         newActiveTemplate.find('.bid-btn')
