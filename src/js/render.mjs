@@ -34,6 +34,7 @@ const renderActiveAuctions = async (properties) => {
   try {
     const newActiveTemplate = app.activeTemplate.clone();
 
+      newActiveTemplate.attr('name', properties.id);
       newActiveTemplate.find('.title').html(properties.title);
       newActiveTemplate.find('.description').html(properties.description);
 
