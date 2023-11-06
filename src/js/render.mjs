@@ -13,19 +13,27 @@ const render = async () => {
   }
 };
 
+const getAuction = async (i) => {
+  const auction = await app.auctions.auctions(i);
+  const id = auction[0].toNumber();
+  const owner = auction[1];
+  const title = auction[2];
+  const description = auction[3];
+  const startPrice = (auction[4].toNumber() / 100).toFixed(2);
+  const endPrice = (auction[5].toNumber() / 100).toFixed(2);
+  const end = auction[6];
+
+  return { auction, id, owner, title, description, startPrice, endPrice, end };
+};
+
 const renderAuctions = async () => {
   try {
     const auctionCount = await app.auctions.auctionCount();
 
     for (let i = 1; i <= auctionCount; i++) {
-      const auction = await app.auctions.auctions(i);
-      const id = auction[0].toNumber();
-      const owner = auction[1];
-      const title = auction[2];
-      const description = auction[3];
-      const startPrice = (auction[4].toNumber() / 100).toFixed(2);
-      const endPrice = (auction[5].toNumber() / 100).toFixed(2);
-      const end = auction[6];
+      const { auction, id, owner,
+        title, description, startPrice,
+        endPrice, end } = await getAuction(i);
 
       if (!end) {
         const newActiveTemplate = app.activeTemplate.clone();
