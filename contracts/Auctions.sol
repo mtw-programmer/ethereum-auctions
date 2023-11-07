@@ -35,7 +35,12 @@ contract Auctions {
 
   event AuctionStopped (
     uint id,
-    address owner
+    string title,
+    string description,
+    address owner,
+    address bidder,
+    uint256 startPrice,
+    uint256 endPrice
   );
 
   constructor () public {
@@ -77,6 +82,11 @@ contract Auctions {
     require(msg.sender == auctions[_id].owner, "You can stop only your auctions!");
     require(!auctions[_id].end, "This auction is already stopped!");
     auctions[_id].end = true;
-    emit AuctionStopped(_id, auctions[_id].owner);
+    if (getLastBidIndex(_id) > 0) {
+      Bid storage bid = bids[_id][getLastBidIndex(_id) - 1];
+      emit AuctionStopped(_id, auctions[_id].title, auctions[_id].description, auctions[_id].owner, bid.bidder, auctions[_id].startPrice, auctions[_id].currentPrice);
+    } else {
+      emit AuctionStopped(_id, auctions[_id].title, auctions[_id].description, auctions[_id].owner, address(0), auctions[_id].startPrice, 0);
+    }
   }
 }
