@@ -1,4 +1,5 @@
 import { app } from './app.mjs';
+import { renderEndAuctions } from './render.mjs';
 
 const onAuctionCreated = () => {
   app.auctions.AuctionCreated({}, (error, event) => {
@@ -41,10 +42,30 @@ const onPlacedBid = () => {
       const amount = (event.args.currentPrice.toNumber() / 100).toFixed(2);
       $(`.activeTemplate[name=${id}] .currentPrice`).html(amount);
       $(`.active-auctions .enter-bid[name=${id}]`).attr('min', (+amount + 0.01).toFixed(2));
-    } else {
+    }
+    if (error) {
       console.error(error);
     }
   });
 };
 
-export { onAuctionCreated, onPlacedBid };
+const onAuctionStopped = () => {
+  app.auctions.AuctionStopped({}, (error, event) => {
+    if (!error && !app.loading) {
+      const id = event.args.id.toNumber();
+      const { bidder, title, description } = event.args;
+      const startPrice = (event.args.startPrice.toNumber() / 100).toFixed(2);
+      const endPrice = (event.args.endPrice.toNumber() / 100).toFixed(2);
+      $(`.activeTemplate[name=${id}]`).remove();
+
+      const properties = { id, title, description, bidder, startPrice, endPrice };
+
+      renderEndAuctions(properties);
+    }
+    if (error) {
+      console.error(error);
+    }
+  });
+};
+
+export { onAuctionCreated, onPlacedBid, onAuctionStopped };

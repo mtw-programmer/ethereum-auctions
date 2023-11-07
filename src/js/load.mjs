@@ -1,5 +1,5 @@
 import { app, render } from './app.mjs';
-import { onAuctionCreated, onPlacedBid } from './events.mjs';
+import { onAuctionCreated, onPlacedBid, onAuctionStopped } from './events.mjs';
 
 const loadAccount = async () => {
   try {
@@ -48,6 +48,7 @@ const loadApp = async () => {
     await render();
     onAuctionCreated();
     onPlacedBid();
+    onAuctionStopped();
   } catch (ex) {
     console.error(ex);
   }

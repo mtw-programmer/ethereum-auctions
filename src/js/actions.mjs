@@ -36,8 +36,8 @@ const placeBid = async (id) => {
 
 const stopAuction = async (id) => {
   try {
-    console.log(id);
     app.setLoading(true, true);
+    if (!id) return;
     await app.auctions.stopAuction(id, { from: app.account });
   } catch (ex) {
     console.error(ex);
