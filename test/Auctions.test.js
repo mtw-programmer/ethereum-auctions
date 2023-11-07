@@ -16,7 +16,7 @@ contract('Auctions', (accounts) => {
   });
 
   it('successfully creates an Auction', async () => {
-    const result = await this.auctions.createAuction('Test title', 'Description', 1);
+    const result = await this.auctions.createAuction('Test title', 'Description', 1, { from: accounts[0] });
     const auctionCount = await this.auctions.auctionCount();
     assert.equal(auctionCount, 2);
     const event = result.logs[0].args;
