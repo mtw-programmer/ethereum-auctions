@@ -76,14 +76,14 @@ const renderEndAuctions = async (properties) => {
     newStopTemplate.find('.title').html(properties.title);
     newStopTemplate.find('.description').html(properties.description);
 
-    const lastBid = await app.auctions.getLastBidIndex(properties.i);
+    const lastBid = await app.auctions.getLastBidIndex(properties.id);
 
     if (lastBid.toNumber() - 1 < 0) {
       newStopTemplate.find('.auctionWinner').html('-');
       newStopTemplate.find('.startPrice').html(properties.startPrice);
       newStopTemplate.find('.endPrice').html('-');
     } else {
-      const bid = await app.auctions.bids(properties.i, lastBid.toNumber() - 1);
+      const bid = await app.auctions.bids(properties.id, lastBid.toNumber() - 1);
 
       newStopTemplate.find('.auctionWinner').html(bid.bidder);
       newStopTemplate.find('.startPrice').html(properties.startPrice);
@@ -114,4 +114,4 @@ const renderAuctions = async () => {
   }
 };
 
-export { render };
+export { render, renderEndAuctions };
