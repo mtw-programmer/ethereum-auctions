@@ -11,6 +11,7 @@ const onAuctionCreated = () => {
         const currentPrice = event.args.startPrice.toNumber();
 
         const newActiveTemplate = app.activeTemplate.clone();
+        newActiveTemplate.attr('name', id);
 
         newActiveTemplate.find('.title').html(title);
         newActiveTemplate.find('.description').html(description);
