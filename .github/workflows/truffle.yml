@@ -27,7 +27,7 @@ jobs:
       run: npm install
 
     - name: Run Ganache service
-      run: docker-compose up -d ganache
+      run: sudo docker-compose up -d ganache
 
     - name: Run Truffle Test
       run: truffle test
@@ -42,4 +42,4 @@ jobs:
     
     - name: Cleanup docker services
       if: always()
-      run: docker-compose down && docker-compose rm --force
+      run: sudo docker-compose down && docker-compose rm --force
