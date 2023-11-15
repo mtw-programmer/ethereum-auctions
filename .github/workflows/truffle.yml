@@ -27,7 +27,7 @@ jobs:
       run: npm install
 
     - name: Run Ganache service
-      run: sudo docker run -d -p 7545:7545 ganache:latest
+      run: sudo docker run --detach --publish 7545:7545 trufflesuite/ganache-cli:latest
 
     - name: Run Truffle Test
       run: truffle test
