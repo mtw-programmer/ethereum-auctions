@@ -31,6 +31,3 @@ jobs:
 
     - name: Run Truffle Test
       run: truffle test
-
-    - name: Run Test Coverage
-      run: truffle run coverage
