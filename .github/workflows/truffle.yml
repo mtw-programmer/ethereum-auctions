@@ -27,7 +27,7 @@ jobs:
       run: npm install
 
     - name: Run Ganache server
-      run: npm run ganache -- -p 7545
+      run: npx ganache -- -p 7545
 
     - name: Run Truffle Test
       run: truffle test
