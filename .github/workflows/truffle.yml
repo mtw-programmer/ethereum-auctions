@@ -24,7 +24,7 @@ jobs:
       run: npm install truffle ganache -g
     
     - name: Install Truffle Dependencies
-      run: npm ci
+      run: npm install
 
     - name: Run Ganache server
       run: npx ganache -p 7545 &
