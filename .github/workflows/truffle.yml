@@ -20,14 +20,14 @@ jobs:
       with:
         node-version: 20.x
     
-    - name: Install Truffle
-      run: npm install truffle -g
+    - name: Install Truffle and Ganache
+      run: npm install truffle ganache -g
     
     - name: Install Truffle Dependencies
       run: npm install
 
-    - name: Run Ganache service
-      run: sudo docker run --detach --publish 7545:7545 trufflesuite/ganache-cli:latest
+    - name: Run Ganache server
+      run: npm run ganache -- -p 7545
 
     - name: Run Truffle Test
       run: truffle test
