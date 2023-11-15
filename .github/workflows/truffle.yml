@@ -1,0 +1,45 @@
+name: Truffle Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup NodeJS 20
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+    
+    - name: Install Truffle
+      run: npm install truffle -g
+    
+    - name: Install Truffle Dependencies
+      run: npm install
+
+    - name: Run Ganache service
+      run: docker-compose up -d ganache
+
+    - name: Run Truffle Test
+      run: truffle test
+
+    - name: Run Codechecks
+      run: npx codechecks
+      env:
+        CC_SECRET: ${{ secrets.CC_SECRET }}  
+
+    - name: Run Test Coverage
+      run: truffle run coverage
+    
+    - name: Cleanup docker services
+      if: always()
+      run: docker-compose down && docker-compose rm --force
