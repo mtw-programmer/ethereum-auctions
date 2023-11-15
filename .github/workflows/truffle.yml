@@ -1,0 +1,33 @@
+name: Truffle Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup NodeJS ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+    
+    - name: Install Truffle and Ganache
+      run: npm install truffle ganache -g
+    
+    - name: Install Truffle Dependencies
+      run: npm install
+
+    - name: Run Ganache server
+      run: npx ganache -p 7545 &
+
+    - name: Run Truffle Test
+      run: truffle test
