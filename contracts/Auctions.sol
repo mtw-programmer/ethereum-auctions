@@ -43,7 +43,7 @@ contract Auctions {
     uint256 endPrice
   );
 
-  constructor () public {
+  constructor () {
     createAuction('Example Auction', 'Item details...', 1);
   }
 
